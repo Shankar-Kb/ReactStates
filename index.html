@@ -31,9 +31,9 @@
 				   );
 				};
 				const deleteCounter = (index) => {
-					  counters.splice(index, 1);
-					  console.log(counters);
-                      setCounters(counters);
+					  const countersNew = Array.from(counters);
+					  countersNew.splice(index, 1);
+                      setCounters(countersNew);
 				}
 				
 				const addCounter = () => {
