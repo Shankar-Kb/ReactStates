@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+		<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <title>React States - Multiple Counters</title>
+	</head>
+	<body style="background-color: #191919; color: #fff;">
+		<div id="root"></div>
+
+		<script type="text/babel">
+			const rootEl = document.getElementById("root");
+			
+			const Counter = ( props ) => (
+				          <div id={props.id}>
+							<h1>{props.count}</h1>
+							<button onClick={props.increment}>Increment</button>
+							<button onClick={props.delete}>Delete</button>
+						  </div>
+			);
+
+			const App = () => {
+				const [counters, setCounters] = React.useState([]);
+				
+                const increment = (index) => {
+                   setCounters(
+                       counters.map( (ele, idx) => (idx === index ? ele + 1 : ele))
+				   );
+				};
+				const deleteCounter = (index) => {
+					  counters.splice(index, 1);
+					  console.log(counters);
+                      setCounters(counters);
+				}
+				
+				const addCounter = () => {
+					setCounters(counters.concat([0]));
+				};
+
+                return (
+					<div>
+						
+						{counters.map( (element, index) => (
+                            
+							<Counter 
+							key={index}
+							id={index} 
+							count={element} 
+							increment={ () => increment(index) }
+							delete= { () => deleteCounter(index) }
+							/>
+
+						))}
+                       <button onClick={addCounter}>Add Another Counter</button>
+                    </div>
+                );
+            };
+
+			ReactDOM.render(<App />, rootEl);
+		</script>
+	</body>
+</html>
