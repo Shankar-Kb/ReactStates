@@ -1,0 +1,17 @@
+body{
+    margin: 0 25vw;
+    text-align: center;
+}
+.todo-box{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+.card-body{
+    display: flex;
+    justify-content: space-between;
+}
+
+.list{
+    width: 50%;
+}
