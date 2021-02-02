@@ -26,13 +26,41 @@
                 const [text, setText] = React.useState(" ");
 
                 const addList = () => {
-					setTodo(todo.concat([text]));
+					setTodo(todo.concat([{text: text, editMode: false}]));
 					setText(" ");
 				}
+
 				const deleteList = (index) => {
                       setTodo(todo.filter((ele,idx) => idx!==index));
-                }
-                const strikeList = (elem, index) => {
+				}
+
+				const editList = (index) => {
+					setTodo(todo.map( (ele, idx) => {
+					   if(idx === index) ele.editMode = true;
+					   return ele;
+					}));
+				}
+
+				const cancelEdit = (index) => {
+					setTodo(todo.map( (ele, idx) => {
+					   if(idx === index) ele.editMode = false;
+					   return ele;
+					}));
+				}
+
+				const confirmEdit = (index) => {
+					let newTextValue = document.getElementById("inputEditText").value;
+					setTodo(todo.map( (ele, idx) => {
+					   if(idx === index) {
+						   ele.text = newTextValue;
+						   ele.editMode = false;
+					   }
+					   console.log(ele);
+					   return ele;
+					}));
+				}
+
+                const strikeList = (index) => {
 					 let currentTextStyle = document.getElementById("T"+index).style.textDecoration;
 					 if (currentTextStyle ===  "line-through") {
 						 document.getElementById("T"+index).style.textDecoration = "none";
@@ -48,11 +76,25 @@
 					   
 					   {
 						   todo.map(( elem, index ) => (
+
 							   <div key={index} className="list card">
-							   <div class="card-body">
-							   <button className="btn btn-secondary" onClick={ ()=>{strikeList(elem, index)} }><i className="fas fa-strikethrough"></i></button>
-                               <h3 id={"T"+index}> {elem} </h3>
-                               <button className="btn btn-secondary" onClick={ ()=>{deleteList(index)} }><i className="fas fa-trash"></i></button>
+							   <div className="card-body">
+
+							   {elem.editMode === false ? 
+								<>
+							   <button className="btn btn-secondary" onClick={ ()=>{strikeList(index)} }><i className="fas fa-strikethrough"></i></button>
+                               <h3 id={"T"+index}> {elem.text} </h3>
+							   <button className="btn btn-secondary" onClick={ ()=>{deleteList(index)} }><i className="fas fa-trash"></i></button>
+							   <button className="btn btn-secondary" onClick={ ()=>{editList(index)} }><i className="fas fa-edit"></i></button>
+							   </>
+								:
+							   <>
+							   <input className="form-control" type="text" id="inputEditText" defaultValue={elem.text} />
+							   <button className="btn btn-secondary" onClick={ ()=>{cancelEdit(index)} }><i className="fas fa-times"></i></button>
+							   <button className="btn btn-secondary" onClick={ ()=>{confirmEdit(index)} }><i className="fas fa-check"></i></button>
+							   </>
+							    }
+							   
 							   </div>
 							   </div>
 						   ))
